@@ -1,4 +1,4 @@
-package shine.st.crawler.crawler
+package shine.st.crawler
 
 import org.joda.time.DateTime
 import org.jsoup.nodes.{Document, Element}
@@ -13,8 +13,6 @@ import scala.collection.JavaConversions._
   */
 object MovieSelector {
   val log = LoggerFactory.getLogger(MovieSelector.getClass)
-
-  def selectMovieName(doc: Document) = doc.select("#body table tbody tr td table tbody tr td font b").get(0).text()
 
   def movie(doc: Document) = {
     def extractMinutes(time: String) = {
