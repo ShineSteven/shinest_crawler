@@ -4,7 +4,7 @@ import org.joda.time.DateTime
 import org.jsoup.nodes.{Document, Element}
 import org.slf4j.LoggerFactory
 import shine.st.common.NumberUtils
-import shine.st.crawler.model.MovieModel.{DailyInfo, Link, MovieInfo}
+import shine.st.crawler.model.CrawlerModel.{DailyInfo, Link, MovieInfo}
 
 import scala.collection.JavaConversions._
 

@@ -27,3 +27,5 @@ libraryDependencies += "com.sksamuel.elastic4s" % "elastic4s-core_2.11" % "2.3.0
 
 // https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient
 libraryDependencies += "org.apache.httpcomponents" % "httpclient" % "4.5.2"
+
+libraryDependencies += "com.typesafe.play" %% "play-json" % "2.4.8"

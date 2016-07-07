@@ -20,8 +20,12 @@ import scala.util.control.NonFatal
 trait Crawler[D] {
   def get(uri: String): D
 
-  def query[T](uri: String, param: Map[String,String])(parse: D => T): Option[T] = {
-    val fullUri = s"$uri?${param.map { case (k, v) => s"$k=$v" }.mkString("&")}"
+  def query[T](uri: String, param: Map[String, String])(parse: D => T): Option[T] = {
+    val fullUri = if (param.isEmpty)
+      uri
+    else
+      s"$uri?${param.map { case (k, v) => s"$k=$v" }.mkString("&")}"
+
     try {
       Option(parse(get(fullUri)))
     } catch {
