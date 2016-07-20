@@ -17,6 +17,8 @@ class PingActor extends Actor with ActorLogging {
   	  counter += 1
   	  if (counter == 3) context.system.shutdown()
   	  else sender() ! PingMessage("ping")
+    case l:List[Int] => println("list is number")
+    case l:List[String] => println("list is String")
   }	
 }
 

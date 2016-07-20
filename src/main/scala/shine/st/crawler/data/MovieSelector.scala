@@ -52,7 +52,7 @@ object MovieSelector {
 
     val dailyInfo = trs.map { tr =>
       val tds = tr.select("td")
-      DailyInfo(time, extractLink(tds.get(2)), extractLink(tds.get(3)), NumberUtils.stringToInt(tds.get(4).text.substring(1).replace(",", "")).getOrElse(0), NumberUtils.stringToInt(tds.get(7).text).getOrElse(0))
+      DailyInfo(time, extractLink(tds.get(2)), extractLink(tds.get(3)), NumberUtils.stringToInt(tds.get(4).text).getOrElse(0), NumberUtils.stringToInt(tds.get(7).text).getOrElse(0), "United States")
     }
     dailyInfo
   }

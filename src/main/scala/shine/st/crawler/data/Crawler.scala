@@ -34,6 +34,10 @@ trait Crawler[D] {
         None
     }
   }
+
+  def query[T](uri: String)(parse: D => T): Option[T] = {
+    query(uri,Map.empty[String,String])(parse)
+  }
 }
 
 object ApiCrawler extends Crawler[HttpResponse] {

@@ -2,7 +2,7 @@ package com.example
 
 import akka.actor.{Actor, ActorLogging, Props}
 
-class PongActor extends Actor with ActorLogging {
+class  PongActor extends Actor with ActorLogging {
   import PongActor._
 
   def receive = {
