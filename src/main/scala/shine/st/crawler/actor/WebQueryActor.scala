@@ -32,7 +32,6 @@ class WebQueryActor extends CommonActor {
       Dump.logger.debug(link.toString)
       WebCrawler.query(link.link)(MovieSelector.movie) match {
         case Some(m) =>
-          Dump.logger.debug("movie query end")
           sender ! m
         case None => Dump.logger.debug("movie query none....")
           sender ! Complete(1)

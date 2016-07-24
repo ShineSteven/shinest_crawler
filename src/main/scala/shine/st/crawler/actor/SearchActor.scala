@@ -16,7 +16,6 @@ class SearchActor extends CommonActor {
       sender ! Complete(1)
 
     case m: MovieModel.Movie =>
-      Dump.logger.debug(s"${m.movieName} created index")
       SearchUtils.createIndex("movie_predict", "movie", m.id, m)
       sender ! Complete(1)
   }

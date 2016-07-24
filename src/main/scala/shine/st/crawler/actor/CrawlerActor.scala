@@ -25,7 +25,7 @@ class MovieCrawlerActor extends CommonActor {
   var completeCount = 0
 
   var endPointDateCount = 0
-  var complateDateCount = 0
+  var completeDateCount = 0
 
   var hasEnded = 0
 
@@ -38,10 +38,9 @@ class MovieCrawlerActor extends CommonActor {
 
     case DailyList(list) =>
       endPointConut += (list.size * 2)
-      complateDateCount += 1
+      completeDateCount += 1
 
       list.foreach { dailyInfo =>
-
         cleanActor ! dailyInfo
         val movie = MovieUtils.findMovie(dailyInfo.movieInfo.title)
         movie.onSuccess { case movie: RichSearchResponse => if (movie.totalHits == 0) {
@@ -53,31 +52,27 @@ class MovieCrawlerActor extends CommonActor {
       }
 
     case movieInfo: MovieInfo =>
-      Dump.logger.debug("movie info receive")
       cleanActor ! movieInfo
 
     case d: MovieModel.Daily =>
-      Dump.logger.debug("to crate daily info")
-
       searchActor ! d
 
     case m: MovieModel.Movie =>
-      Dump.logger.debug("to crate")
+      Dump.logger.debug(s"movie: '${m.movieName}' to crate")
       searchActor ! m
 
     case EndComplete =>
       hasEnded += 1
-      Dump.logger.debug(s"shutdown check $hasEnded")
 
       if (hasEnded == 4) {
-        Dump.logger.debug("shutdown...")
+        Dump.logger.debug("shutdown movie crawler system...")
         context.system.shutdown()
       }
 
     case Check =>
-      Dump.logger.debug(s"end point date count ($endPointDateCount : $complateDateCount), end point count ($endPointConut : $completeCount)")
-      if (endPointDateCount == complateDateCount && endPointConut == completeCount) {
-        Dump.logger.debug("end...")
+      Dump.logger.debug(s"end point date count ($endPointDateCount : $completeDateCount), end point count ($endPointConut : $completeCount)")
+      if (endPointDateCount == completeDateCount && endPointConut == completeCount) {
+        Dump.logger.debug("graceful stop actor start..")
         queryActor ! End
         cleanActor ! End
         searchActor ! End

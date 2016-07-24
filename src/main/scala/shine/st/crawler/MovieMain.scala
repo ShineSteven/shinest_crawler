@@ -6,27 +6,53 @@ import shine.st.common.DateTimeUtils
 import shine.st.common.akka.Message.Check
 import shine.st.crawler.actor.{BigBoss, MovieCrawlerActor}
 import shine.st.crawler.actor.MovieCrawlerActor.CrawlerDate
+import Dump.logger
 
 /**
   * Created by stevenfanchiang on 2016/7/19.
   */
 object MovieMain {
+  val defaultDate = new DateTime().minusDays(3).secondOfDay().withMinimumValue()
+
   def main(args: Array[String]): Unit = {
-    Dump.logger.debug("movie query main start...")
+    logger.debug("movie crawler main start...")
+
+    val (startDate, endDate) = args.length match {
+      case 0 => (defaultDate,defaultDate)
+      case 1 => (parseDateOrDefault(args(0)), defaultDate)
+      case 2 => (parseDateOrDefault(args(0)), parseDateOrDefault(args(1)))
+      case _ => throw new Exception("wrong argument size")
+    }
+
+    if (endDate.isAfter(defaultDate)) {
+      logger.debug("結束日期需小於3天前")
+      System.exit(-1)
+    }
+
+    val different = (endDate.getDayOfYear - startDate.getDayOfYear)
+    val dateList = (for (i <- 0 to different) yield {
+      startDate.plusDays(i)
+    }).toList
+
     val system = ActorSystem("CrawlerMovie")
     val movieActor = system.actorOf(MovieCrawlerActor.props, "movieActor")
     val bigBossActor = system.actorOf(BigBoss(movieActor), "bigBossActor")
 
-    val runDate = new DateTime().minusDays(3)
-    Dump.logger.debug(s"run date ${runDate.toString(DateTimeUtils.dateTimeFormat)}")
+    Dump.logger.debug(s"crawler date range ${
+      startDate.toString(DateTimeUtils.dateFormat)
+    } ~ ${
+      endDate.toString(DateTimeUtils.dateFormat)
+    }")
 
-    movieActor ! CrawlerDate(List(runDate))
+    Dump.logger.debug(dateList.toString)
+    movieActor ! CrawlerDate(dateList)
+    //    movieActor ! CrawlerDate(List.empty[DateTime])
     bigBossActor ! Check
 
     system.awaitTermination()
+  }
 
-
-
-
+  def parseDateOrDefault(text: String) = {
+    DateTimeUtils.parseDate(text).getOrElse(defaultDate)
   }
 }

@@ -15,7 +15,6 @@ class DataCleanActor extends CommonActor {
       sender ! Daily(d.date, d.gross, Movie(d.movieInfo.title.hashCode, d.movieInfo.title, None, None, None, None, None), d.regionName, d.theaters)
 
     case m: MovieInfo =>
-      Dump.logger.debug("return movie model")
       sender ! Movie(m.movieName.hashCode, m.movieName, Option(m.MPAA), Option(m.genre), Option(m.runTime), Option(m.budget), Option(m.studio))
   }
 }

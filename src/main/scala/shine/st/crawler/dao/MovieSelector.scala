@@ -3,7 +3,7 @@ package shine.st.crawler
 import org.joda.time.DateTime
 import org.jsoup.nodes.{Document, Element}
 import org.slf4j.LoggerFactory
-import shine.st.common.NumberUtils
+import shine.st.common.{DateTimeUtils, NumberUtils}
 import shine.st.crawler.model.CrawlerModel.{DailyInfo, Link, MovieInfo}
 
 import scala.collection.JavaConversions._
@@ -44,7 +44,7 @@ object MovieSelector {
       Link(a.text(), a.attr("abs:href"))
     }
 
-    val time = new DateTime()
+    val time = DateTimeUtils.enDateFormat.parseDateTime(doc.select("#body center center font b").get(0).text())
 
     val table = doc.select("#body center center table tr td table").get(1)
 

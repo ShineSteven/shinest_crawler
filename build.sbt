@@ -20,7 +20,7 @@ libraryDependencies += "org.jsoup" % "jsoup" % "1.9.2"
 
 libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.1.7"
 
-libraryDependencies += "joda-time" % "joda-time" % "2.9.4"
+libraryDependencies += "joda-time" % "joda-time" % "2.9.4" // exclude("com.sksamuel.elastic4s", "elastic4s-core_2.11")
 
 libraryDependencies += "com.sksamuel.elastic4s" % "elastic4s-core_2.11" % "2.3.0"
 
@@ -29,3 +29,7 @@ libraryDependencies += "com.sksamuel.elastic4s" % "elastic4s-core_2.11" % "2.3.0
 libraryDependencies += "org.apache.httpcomponents" % "httpclient" % "4.5.2"
 
 libraryDependencies += "com.typesafe.play" %% "play-json" % "2.4.8"
+
+resolvers += "Local Maven Repository" at "file://" + Path.userHome.absolutePath + "/.m2/repository"
+
+
