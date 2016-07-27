@@ -1,5 +1,5 @@
 ## movie crawler
-爬[box office mojo](http://www.boxofficemojo.com/daily/chart/?view=1day&sortdate=2016-06-28&p=.htm)每日美國電影票房，存到Elastic search。
+用akka 爬[box office mojo](http://www.boxofficemojo.com/daily/chart/?view=1day&sortdate=2016-06-28&p=.htm)每日美國電影票房，存到Elastic Search。
 
 ## 安裝工具
 * elastic search 2.3.3
