@@ -5,7 +5,26 @@
 * elastic search 2.3.3
 
 ## package
-打包bug排除中，目前只能import to Intelllij IDE run
+1. 須先install 我的[common](https://github.com/ShineSteven/shinest_common)程式
+
+2. package crawler
+```
+./bin/activator clean assembly
+```
+
+## run
+default 爬3天前資料，
+
+也可接收日期參數, 格式yyyy-MM-dd
+* start_date: 開始日
+* end_date: 結束日，若日期大於3天前，則一律改為3天前
+```
+java -jar shinest_crawler-assembly-1.0.1.SNAPSHOT.jar
+
+java -jar shinest_crawler-assembly-1.0.1.SNAPSHOT.jar 2016-07-21
+
+java -jar shinest_crawler-assembly-1.0.1.SNAPSHOT.jar 2016-07-20 2016-07-22
+```
 
 ## index schema
 ```
