@@ -24,7 +24,6 @@ libraryDependencies += "joda-time" % "joda-time" % "2.9.4" // exclude("com.sksam
 
 libraryDependencies += "com.sksamuel.elastic4s" % "elastic4s-core_2.11" % "2.3.0"
 
-
 // https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient
 libraryDependencies += "org.apache.httpcomponents" % "httpclient" % "4.5.2"
 
@@ -32,4 +31,11 @@ libraryDependencies += "com.typesafe.play" %% "play-json" % "2.4.8"
 
 resolvers += "Local Maven Repository" at "file://" + Path.userHome.absolutePath + "/.m2/repository"
 
+
+assemblyMergeStrategy in assembly := {
+  case PathList("org","joda","time","base","BaseDateTime.class") => MergeStrategy.first
+  case x =>
+    val oldStrategy = (assemblyMergeStrategy in assembly).value
+    oldStrategy(x)
+}
 
