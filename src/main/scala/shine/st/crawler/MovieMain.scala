@@ -39,9 +39,9 @@ object MovieMain {
     val bigBossActor = system.actorOf(BigBoss(movieActor), "bigBossActor")
 
     Dump.logger.debug(s"crawler date range ${
-      startDate.toString(DateTimeUtils.dateFormat)
+      DateTimeUtils.format(startDate)(DateTimeUtils.DATE_PATTERN)
     } ~ ${
-      endDate.toString(DateTimeUtils.dateFormat)
+      DateTimeUtils.format(endDate)(DateTimeUtils.DATE_PATTERN)
     }")
 
     Dump.logger.debug(dateList.toString)

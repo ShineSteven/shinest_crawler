@@ -19,7 +19,7 @@ class WebQueryActor extends CommonActor {
   override def realReceive: Receive = {
     case WebQueryActor.Daily(d) =>
 
-      val parameter = WebQueryActor.dailyParameter + ("sortdate" -> d.toString(DateTimeUtils.dateFormat))
+      val parameter = WebQueryActor.dailyParameter + ("sortdate" -> DateTimeUtils.format(d)(DateTimeUtils.DATE_PATTERN))
       val dailyInfo = WebCrawler.query(WebQueryActor.dailyUrl, parameter)(MovieSelector.daily)
 
       dailyInfo match {

@@ -13,7 +13,7 @@ package object crawler {
   implicit val defaultTimeout = 5 seconds
 
   implicit val dateWriter: Writes[DateTime] = new Writes[DateTime] {
-    override def writes(o: DateTime): JsValue = JsString(o.toString(DateTimeUtils.dateTimeFormat))
+    override def writes(o: DateTime): JsValue = JsString(o.toString(DateTimeUtils.DATE_HOUR_PATTERN))
   }
 
   implicit val movieWrites: Writes[Movie] = (

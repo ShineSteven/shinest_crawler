@@ -44,7 +44,7 @@ object MovieSelector {
       Link(a.text(), a.attr("abs:href"))
     }
 
-    val time = DateTimeUtils.enDateFormat.parseDateTime(doc.select("#body center center font b").get(0).text())
+    val time = DateTimeUtils.parseEnDate(doc.select("#body center center font b").get(0).text()).get
 
     val table = doc.select("#body center center table tr td table").get(1)
 
