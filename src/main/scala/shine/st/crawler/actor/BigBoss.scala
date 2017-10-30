@@ -1,10 +1,10 @@
 package shine.st.crawler.actor
 
 import akka.actor.{ActorRef, Props}
-import shine.st.common.akka.Message.{Check, Wait}
+import shine.st.crawler.actor.Message.{Check, Wait}
 
 /**
-  * Created by stevenfanchiang on 2016/7/20.
+  * Created by  on 2016/7/20.
   */
 class BigBoss(val watchActor: ActorRef) extends CommonActor {
 

@@ -1,119 +1,167 @@
-## movie crawler
-用akka 爬[box office mojo](http://www.boxofficemojo.com/daily/chart/?view=1day&sortdate=2016-06-28&p=.htm)每日美國電影票房，存到Elastic Search。
+# movie crawler
+用 akka + scala 爬[box office mojo](http://www.boxofficemojo.com/daily/chart/?view=1day&sortdate=2016-06-28&p=.htm) 美國電影票房，存到 Elasticsearch。
 
-## 安裝工具
-* elastic search 2.3.3
+# pre-install
+* sbt
+* elastic search 5.5.2
+* 我的 common library [shinest common](https://github.com/shine-st/common)
 
-## package
-1. 須先install 我的[common](https://github.com/ShineSteven/shinest_common)程式
 
-2. package crawler
+# run
+## parameter
 ```
-./bin/activator clean assembly
+## whole year on 2016
+sbt "run Y 2016"
+
+## year range at 2016 ~ 2017
+sbt "run YR 2016 2017"
+
+## weekly on 2017W15
+sbt "run W 2017-15"
+
+## weekly and daily on 2017W15
+sbt "run WD 2017-15"
+
+## weekly range at  2017W1 2017W15
+sbt "run WR 2017 1 2017 15"
+
+## weekly and daily range at  2017W1 2017W15
+sbt "run WRD 2017 1 2017 15"
+
+## daily on 2017-10-04
+sbt "run D 2017-10-04"
 ```
 
-## run
-default 爬3天前資料，
-
-也可接收日期參數, 格式yyyy-MM-dd
-* start_date: 開始日
-* end_date: 結束日，若日期大於3天前，則一律改為3天前
+# box_office index schema
 ```
-java -jar shinest_crawler-assembly-1.0.1.SNAPSHOT.jar
-
-java -jar shinest_crawler-assembly-1.0.1.SNAPSHOT.jar 2016-07-21
-
-java -jar shinest_crawler-assembly-1.0.1.SNAPSHOT.jar 2016-07-20 2016-07-22
-```
-
-## index schema
-```
-PUT movie_predict
+PUT box_office
 {
+  "settings": {
+    "index": {
+      "query.default_field": "movie_searchable"
+    }
+  },
   "mappings": {
     "movie": {
       "_all": {
         "enabled": false
       },
       "properties": {
-        "movie_name": {
-          "type": "string",
+        "name": {
+          "type": "text",
           "fields": {
             "raw": {
-              "type": "string",
-              "index": "not_analyzed"
+              "type": "keyword"
             }
-          }
+          },
+          "copy_to": "movie_searchable"
         },
         "MPAA": {
-          "type": "string",
-          "index": "not_analyzed"
+          "type": "keyword"
         },
         "genre": {
-          "type": "string"
+          "type": "keyword"
         },
-        "runtime": {
+        "duration": {
           "type": "integer"
         },
         "budget": {
-          "type": "integer"
+          "type": "keyword"
         },
-        "studio": {
-          "type": "string"
+        "distributor": {
+          "type": "keyword"
+        },
+        "release": {
+          "type": "nested",
+          "properties": {
+            "release_date": {
+              "type": "date"
+            },
+            "region_name": {
+              "type": "keyword"
+            }
+          }
+        },
+        "update_at": {
+          "type": "date"
         }
       }
     },
-    "daily": {
+    "weekly": {
+      "_parent": {
+        "type": "movie"
+      },
+      "_all": {
+        "enabled": false
+      },
       "properties": {
-        "date": {
-          "type": "date",
-          "format": "yyy-MM-dd HH:mm:ss||epoch_millis"
+        "rank":{
+          "type": "short"
         },
-        "gross": {
+        "year": {
+          "type": "short"
+        },
+        "week": {
+          "type": "short"
+        },
+        "on_release_week": {
+          "type": "short"
+        },
+        "weekly_gross": {
           "type": "integer"
         },
-        "movie": {
-          "properties": {
-            "id": {
-              "type": "integer",
-              "index": "not_analyzed"
-            },
-            "movie_name": {
-              "type": "string",
-              "fields": {
-                "raw": {
-                  "type": "string",
-                  "index": "not_analyzed"
-                }
-              }
-            }
-          }
+        "weekday_gross": {
+          "type": "integer"
+        },
+        "weekend_gross": {
+          "type": "integer"
         },
         "theaters": {
           "type": "integer"
         },
         "region_name": {
-          "type": "string",
-          "index": "not_analyzed"
+          "type": "keyword"
+        },
+        "studio": {
+          "type": "keyword"
+        },
+        "update_at": {
+          "type": "date"
         }
       }
     },
-    "release": {
+    "daily": {
+      "_parent": {
+        "type": "movie"
+      },
+      "_all": {
+        "enabled": false
+      },
       "properties": {
-        "date": {
-          "type": "date",
-          "format": "yyy-MM-dd HH:mm:ss||epoch_millis"
+        "rank":{
+          "type": "short"
         },
-        "movie_id": {
-          "type": "string",
-          "index": "not_analyzed"
+        "date": {
+          "type": "date"
+        },
+        "gross": {
+          "type": "integer"
+        },
+        "theaters": {
+          "type": "integer"
         },
         "region_name": {
-          "type": "string",
-          "index": "not_analyzed"
+          "type": "keyword"
+        },
+        "studio": {
+          "type": "keyword"
+        },
+        "update_at": {
+          "type": "date"
         }
       }
     }
   }
 }
+
 ```

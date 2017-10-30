@@ -2,18 +2,20 @@ package shine.st.crawler.actor
 
 import akka.actor.Actor
 import akka.pattern.gracefulStop
-import shine.st.common.akka.Message.{End, EndComplete}
+import shine.st.crawler.Dump
+import shine.st.crawler.actor.Message.End
 
 import scala.concurrent.duration._
 
 /**
-  * Created by stevenfanchiang on 2016/7/19.
+  * Created by shinest on 2016/7/19.
   */
 abstract class CommonActor extends Actor {
   def endReceive: Receive = {
     case End =>
       gracefulStop(self, 5 seconds)
-      sender ! EndComplete
+
+    case a => Dump.logger.error(s"error ${a.toString}")
   }
 
   override def receive = realReceive orElse endReceive

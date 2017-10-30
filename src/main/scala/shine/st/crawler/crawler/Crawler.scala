@@ -5,6 +5,7 @@ import org.apache.http.client.methods.HttpGet
 import org.apache.http.impl.client.{CloseableHttpClient, HttpClients}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import shine.st.crawler.Dump.logger
 
 import scala.util.control.NonFatal
 
@@ -20,12 +21,14 @@ import scala.util.control.NonFatal
 trait Crawler[D] {
   def get(uri: String): D
 
-  def query[T](uri: String, param: Map[String, String])(parse: D => T): Option[T] = {
+  def query[T](uri: String, param: Map[String, Any])(parse: D => T): Option[T] = {
+    Thread.sleep(500)
     val fullUri = if (param.isEmpty)
       uri
     else
-      s"$uri?${param.map { case (k, v) => s"$k=$v" }.mkString("&")}"
+      s"$uri?${param.map { case (k, v) => s"$k=${v.toString}" }.mkString("&")}"
 
+    logger.info(s"query url $fullUri")
     try {
       Option(parse(get(fullUri)))
     } catch {
@@ -36,15 +39,15 @@ trait Crawler[D] {
   }
 
   def query[T](uri: String)(parse: D => T): Option[T] = {
-    query(uri,Map.empty[String,String])(parse)
+    query(uri, Map.empty[String, String])(parse)
   }
 }
 
 object ApiCrawler extends Crawler[HttpResponse] {
   override def get(uri: String) = {
-    val httpclient: CloseableHttpClient = HttpClients.createDefault()
+    val httpClient: CloseableHttpClient = HttpClients.createDefault()
     val httpGet: HttpGet = new HttpGet(uri)
-    httpclient.execute(httpGet)
+    httpClient.execute(httpGet)
   }
 }
 
