@@ -19,9 +19,13 @@ object BoxOfficeCemojoParser {
     def extractMinutes(time: String) = {
       val repleactTime = time.replace(" ", "")
 
-      val hour = repleactTime.substring(0, repleactTime.indexOf("hrs."))
-      val minutes = repleactTime.substring(repleactTime.indexOf("hrs.") + 4, repleactTime.indexOf("min."))
-      NumberUtils.strTrans[Int](hour).getOrElse(0) * 60 + NumberUtils.strTrans[Int](minutes).getOrElse(0)
+      if (repleactTime == "N/A")
+        0
+      else {
+        val hour = repleactTime.substring(0, repleactTime.indexOf("hrs."))
+        val minutes = repleactTime.substring(repleactTime.indexOf("hrs.") + 4, repleactTime.indexOf("min."))
+        NumberUtils.strTrans[Int](hour).getOrElse(0) * 60 + NumberUtils.strTrans[Int](minutes).getOrElse(0)
+      }
     }
 
     val movieName = doc.select("#body table tbody tr td table tbody tr td font b").get(1).text

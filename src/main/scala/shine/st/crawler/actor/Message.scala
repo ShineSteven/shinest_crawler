@@ -30,8 +30,8 @@ object Message {
     def canEqual(other: Any) = other.isInstanceOf[QueryDate]
   }
 
-  case class QueryWeek(week: Int, year: Int) {
-    override def hashCode = (week, year).##
+  case class QueryWeek(year: Int, week: Int) {
+    override def hashCode = (year, week).##
 
     override def equals(other: Any) = other match {
       case that: QueryWeek =>
