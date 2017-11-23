@@ -77,12 +77,18 @@ class MovieActor extends CommonActor {
 
 
     case d: BoxOfficeCemojo.Daily =>
-      val movie = movies.get(d.movieInfo.title) match {
-        case Some(m) => m
-        case None =>
-          self ! QueryMovie(d.movieInfo)
-          Movie(None, HashUtils.sha256(d.movieInfo.title))
-      }
+//      val movie = movies.getOrElseUpdate(d.movieInfo.title) match {
+//        case Some(m) => m
+//        case None =>
+//          self ! QueryMovie(d.movieInfo)
+//          Movie(None, HashUtils.sha256(d.movieInfo.title))
+//      }
+
+      val movieName = d.movieInfo.title
+      val movie = movies.getOrElseUpdate(movieName, {
+        self ! QueryMovie(d.movieInfo)
+        Movie(None, HashUtils.sha256(d.movieInfo.title))
+      })
 
       elasticsearchActor ! BoxOffice.Daily(Option(DailySource(d.date, d.gross, d.rank, d.theaters, "US", d.studio.title)), movie, HashUtils.sha256(s"${DateTimeUtils.formatDate(d.date)}US${d.movieInfo.title}"))
 
@@ -99,7 +105,7 @@ class MovieActor extends CommonActor {
 
       elasticsearchActor ! BoxOffice.Weekly(Option(WeeklySource(w.year, w.week, w.onReleaseWeek, w.weeklyGross, w.weekdayGross, w.weekendGross, w.rank, w.theaters, "US", w.studio.title, None)), movie, HashUtils.sha256(s"${w.year}${w.week}US${w.movieInfo.title}"))
 
-      val qw = QueryWeek(w.week, w.year)
+      val qw = QueryWeek(w.year, w.week)
       queryWeekIndexCompleteCount.update(qw, queryWeekIndexCompleteCount(qw) + 1)
 
     case Check =>
