@@ -3,7 +3,7 @@ package shine.st.crawler.actor
 import akka.actor.Props
 import com.typesafe.config.ConfigFactory
 import shine.st.common.{ConfigUtils, DateTimeUtils}
-import shine.st.crawler.actor.Message._
+import shine.st.crawler.model.Message._
 import shine.st.crawler.{BoxOfficeCemojoParser, Dump, WebCrawler}
 
 import scala.collection.JavaConversions._
@@ -12,7 +12,7 @@ import scala.collection.JavaConversions._
 /**
   * Created by shinest on 2016/7/16.
   */
-class WebQueryActor extends CommonActor {
+class WebQueryActor extends BaseActor {
   val config = ConfigFactory.load
   val dailyUrl = config.getString("movie.daily.path")
   val weeklyUrl = config.getString("movie.weekly.path")
@@ -24,7 +24,7 @@ class WebQueryActor extends CommonActor {
     data.foreach(theSender ! _)
   }
 
-  override def realReceive: Receive = {
+  override def adapterReceive: Receive = {
     case qd: QueryDate =>
 
       val parameter = dailyParameter + ("sortdate" -> DateTimeUtils.formatDate(qd.date))

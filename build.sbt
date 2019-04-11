@@ -6,6 +6,6 @@ lazy val root = (project in file("."))
   .settings(
     libraryDependencies ++= Dependencies.crawler
   ).settings(
-  mainClass in assembly := Some("shine.st.crawler.EntryMovie"),
-  mainClass in (Compile, run) := Some("shine.st.crawler.EntryMovie"),
+  mainClass in assembly := Some("shine.st.crawler.BoxOfficeCrawler"),
+  mainClass in (Compile, run) := Some("shine.st.crawler.BoxOfficeCrawler"),
 )

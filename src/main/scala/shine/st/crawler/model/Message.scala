@@ -1,4 +1,4 @@
-package shine.st.crawler.actor
+package shine.st.crawler.model
 
 import akka.actor.ActorRef
 import org.joda.time.DateTime
@@ -6,7 +6,7 @@ import shine.st.crawler.data.web.BoxOfficeCemojo.Link
 
 object Message {
 
-  case object Start
+  case class Start(movieExecutorAmount: Int)
 
   case object End
 

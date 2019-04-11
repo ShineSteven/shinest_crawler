@@ -7,7 +7,7 @@ object Settings {
   lazy val commonSettings = Seq(
     organization := "shine.st",
     version := "0.0.1",
-    scalaVersion := "2.12.3",
+    scalaVersion := "2.12.8",
     parallelExecution in test := false,
     compileOrder in Compile := CompileOrder.Mixed, // change to Mixed for Play
     fork := true,

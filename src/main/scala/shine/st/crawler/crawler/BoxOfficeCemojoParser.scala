@@ -3,7 +3,7 @@ package shine.st.crawler
 import org.jsoup.nodes.{Document, Element}
 import org.slf4j.LoggerFactory
 import shine.st.common.{DateTimeUtils, NumberUtils}
-import shine.st.crawler.actor.Message.QueryWeek
+import shine.st.crawler.model.Message.QueryWeek
 import shine.st.crawler.data.web.BoxOfficeCemojo
 import shine.st.crawler.data.web.BoxOfficeCemojo._
 

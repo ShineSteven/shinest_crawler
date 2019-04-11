@@ -3,7 +3,7 @@ import sbt._
 
 object Dependencies {
 
-  val akkaVersion: String = "2.5.6"
+  val akkaVersion: String = "2.5.22"
   val akkaHttpVersion = "10.0.10"
   val elastic4sVersion = "5.5.4"
 

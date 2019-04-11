@@ -5,7 +5,7 @@ import org.joda.time.{DateTime, DateTimeConstants}
 import shine.st.common.{DateTimeUtils, NumberUtils}
 import shine.st.crawler.Dump.logger
 import shine.st.crawler.actor.MasterActor
-import shine.st.crawler.actor.Message.{QueryDate, QueryWeek, Start}
+import shine.st.crawler.model.Message.{QueryDate, QueryWeek, Start}
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
@@ -105,9 +105,9 @@ object EntryMovie {
     val system = ActorSystem("BoxOfficeCrawler")
     import system._
 
-    val masterActor = system.actorOf(MasterActor(dailyList, weeklyList), "master-actor")
+//    val masterActor = system.actorOf(MasterActor(dailyList, weeklyList), "master-actor")
 
-    masterActor ! Start
+//    masterActor ! Start
 
     Await.result(system.whenTerminated.map(_ => logger.info("Actor system was shut down")), Duration.Inf)
 

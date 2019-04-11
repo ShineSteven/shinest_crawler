@@ -4,7 +4,7 @@ import akka.actor.Props
 import com.sksamuel.elastic4s.circe._
 import shine.st.common.{DateTimeUtils, HashUtils}
 import shine.st.crawler.Dump
-import shine.st.crawler.actor.Message._
+import shine.st.crawler.model.Message._
 import shine.st.crawler.data.index.BoxOffice
 import shine.st.crawler.data.index.BoxOffice._
 import shine.st.crawler.data.web.BoxOfficeCemojo
@@ -16,7 +16,7 @@ import scala.collection.mutable
   * Created by shinest on 2016/7/12.
   */
 
-class MovieActor extends CommonActor {
+class MovieActor extends BaseActor {
   val webQueryActor = context.actorOf(WebQueryActor.props, "query-actor")
   //  val cleanActor = context.actorOf(CleanActor.props, "clean-actor")
   val elasticsearchActor = context.actorOf(ElasticsearchActor.props, "elasticsearch-actor")
@@ -38,7 +38,7 @@ class MovieActor extends CommonActor {
     bigBossActor ! Check
   }
 
-  override def realReceive: Receive = {
+  override def adapterReceive: Receive = {
 
     case d: QueryDate =>
       queryDateIndexCompleteCount.update(d, 0)
@@ -109,7 +109,6 @@ class MovieActor extends CommonActor {
       queryWeekIndexCompleteCount.update(qw, queryWeekIndexCompleteCount(qw) + 1)
 
     case Check =>
-
       Dump.logger.debug(s"${self.path.name} check complete count: ")
       var counter = 0
       queryDateIndexCompleteCount.foreach { case (date, count) =>

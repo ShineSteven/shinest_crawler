@@ -5,7 +5,7 @@ import com.sksamuel.elastic4s.ElasticsearchClientUri
 import com.sksamuel.elastic4s.http.ElasticDsl.{indexInto, _}
 import com.sksamuel.elastic4s.http.HttpClient
 import io.circe.syntax._
-import shine.st.crawler.actor.Message.{End, Flush}
+import shine.st.crawler.model.Message.{End, Flush}
 import shine.st.crawler.data._
 import shine.st.crawler.data.index.BoxOffice.{Daily, Movie, Weekly}
 import shine.st.crawler.search.ElasticsearchUtils
@@ -15,14 +15,14 @@ import scala.collection.mutable.ListBuffer
 /**
   * Created by shinest on 2016/7/16.
   */
-class ElasticsearchActor extends CommonActor {
+class ElasticsearchActor extends BaseActor {
 
   val client = HttpClient(ElasticsearchClientUri("localhost", 9200))
   val dailyBuffer = new ListBuffer[Daily]()
   val weeklyBuffer = new ListBuffer[Weekly]()
 
 
-  override def realReceive: Receive = {
+  override def adapterReceive: Receive = {
 
     case d: Daily =>
       dailyBuffer += d

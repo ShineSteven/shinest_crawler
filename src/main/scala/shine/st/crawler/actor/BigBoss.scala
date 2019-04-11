@@ -1,14 +1,14 @@
 package shine.st.crawler.actor
 
 import akka.actor.{ActorRef, Props}
-import shine.st.crawler.actor.Message.{Check, Wait}
+import shine.st.crawler.model.Message.{Check, Wait}
 
 /**
   * Created by  on 2016/7/20.
   */
-class BigBoss(val watchActor: ActorRef) extends CommonActor {
+class BigBoss(val watchActor: ActorRef) extends BaseActor {
 
-  override def realReceive: Receive = {
+  override def adapterReceive: Receive = {
     case Check =>
       watchActor ! Check
 
